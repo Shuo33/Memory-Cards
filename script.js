@@ -18,28 +18,30 @@ let currentActiveCard = 0;
 const cardsEl = [];
 
 // Store card data from localStorage
-const cardsData = [
-    {
-        question: 'What must a variable begin with ?',
-        answer: 'A letter, $ or _'
-    },
-    {
-        question: 'What is a variable ?',
-        answer: 'Container for a piece of data'
-    },
-    {
-        question: 'Example of Case Sensitive Variable',
-        answer: 'thisIsAVariable'
-    }
-];
+// const cardsData = [
+//     {
+//         question: 'What must a variable begin with ?',
+//         answer: 'A letter, $ or _'
+//     },
+//     {
+//         question: 'What is a variable ?',
+//         answer: 'Container for a piece of data'
+//     },
+//     {
+//         question: 'Example of Case Sensitive Variable',
+//         answer: 'thisIsAVariable'
+//     }
+// ];
+
+const cardsData = getCardsData();
 
 
-// Create all cards
+// Create all cards - replace forEach() with map()
 function createCards() {
-    cardsData.map((data, index) => createCard(data, index));
+    cardsData.forEach((data, index) => createCard(data, index));
 }
 
-// Create a single card
+// Create a single card in DOM
 function createCard(data, index) {
     const card = document.createElement('div'); 
     card.classList.add('card'); 
@@ -74,8 +76,6 @@ function createCard(data, index) {
     updateCurrentPage();
 }
 
-createCards();
-
 
 // Show page number of cards
 function updateCurrentPage() {
@@ -83,6 +83,21 @@ function updateCurrentPage() {
     ${currentActiveCard + 1}/${cardsEl.length}
     `;
 }
+
+
+// Get the cards data from localStorage
+function getCardsData() {
+    const cards = JSON.parse(localStorage.getItem('cards'));
+    return cards === null ? [] : cards; 
+}
+
+// Add card to local storage
+function setCardsData(cards) {
+    localStorage.setItem('cards', JSON.stringify(cards));  
+    window.location.reload();
+}
+
+createCards();
 
 // Event listeners 
 
@@ -128,3 +143,42 @@ prevBtn.addEventListener('click', () => {
     // update the current page number
     updateCurrentPage();
 }); 
+
+
+// Show add container
+showCardsBtn.addEventListener('click', () =>
+    addCardContainer.classList.add('show')   
+);
+
+// Hide add container
+hideCardsBtn.addEventListener('click', () => 
+    addCardContainer.classList.remove('show')  
+);
+
+
+// Add new card
+addCardBtn.addEventListener('click', () => {
+    const question = questionEl.value;
+    const answer = answerEl.value; 
+
+    if (!question.trim() & !answer.trim()) {
+        alert('please enter the question and answer here'); 
+    } else {
+        const newCard = { question, answer }; 
+        
+        questionEl.value = '';
+        answerEl.value = '';
+
+        addCardContainer.classList.remove('show');
+
+        cardsData.push(newCard);
+
+        setCardsData(cardsData);
+
+        createCard(newCard);
+    }
+});
+
+
+
+

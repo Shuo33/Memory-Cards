@@ -11,7 +11,7 @@ const clearBtn = document.getElementById('clear');
 const addCardContainer = document.getElementById('add-container');
 
 
-// Keep track of current card with it's page number
+// Set the curent card index to 0
 let currentActiveCard = 0; 
 
 // Store DOM cards
@@ -83,3 +83,48 @@ function updateCurrentPage() {
     ${currentActiveCard + 1}/${cardsEl.length}
     `;
 }
+
+// Event listeners 
+
+// Go to next page 
+nextBtn.addEventListener('click', () => {
+
+    // move the current card to left 
+    cardsEl[currentActiveCard].className = 'card left';
+
+    // augment the current index 
+    currentActiveCard ++;
+
+    // when arrive to the last page, the next button shall keep us stay in the last page
+    if (currentActiveCard > cardsEl.length - 1) {
+        currentActiveCard = cardsEl.length - 1;
+    }
+
+    // display the current card with it's updated index to the DOM
+    cardsEl[currentActiveCard].className = 'card active';
+    
+    // update the current page number
+    updateCurrentPage();
+}); 
+
+
+// Go to prev page 
+prevBtn.addEventListener('click', () => {
+
+    // faire disparaitre the current card
+    cardsEl[currentActiveCard].className = 'card'; 
+
+    // diminuer the index 
+    currentActiveCard --;
+    
+    // when arrive to the first page, the prev button shall keep us stay in the first page
+    if (currentActiveCard < 0) {
+        currentActiveCard = 0;
+    }
+
+    // display the current card with it's updated index to the DOM
+    cardsEl[currentActiveCard].className = 'card active';
+
+    // update the current page number
+    updateCurrentPage();
+}); 

@@ -38,7 +38,7 @@ const cardsData = getCardsData();
 
 // Create all cards - replace forEach() with map()
 function createCards() {
-    cardsData.forEach((data, index) => createCard(data, index));
+    cardsData.map((data, index) => createCard(data, index));
 }
 
 // Create a single card in DOM
@@ -93,8 +93,7 @@ function getCardsData() {
 
 // Add card to local storage
 function setCardsData(cards) {
-    localStorage.setItem('cards', JSON.stringify(cards));  
-    window.location.reload();
+    localStorage.setItem('cards', JSON.stringify(cards)); window.location.reload();
 }
 
 createCards();
@@ -177,6 +176,14 @@ addCardBtn.addEventListener('click', () => {
 
         createCard(newCard);
     }
+});
+
+
+// Clear cards button
+clearBtn.addEventListener('click', () => {
+    localStorage.clear();
+    cardsContainer.innerHTML = '';
+    window.location.reload();
 });
 
 
